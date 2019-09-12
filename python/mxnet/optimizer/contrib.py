@@ -20,6 +20,7 @@
 """Contrib optimizers."""
 from ..ndarray import (NDArray, clip, contrib, mean, sqrt, square, zeros)
 from .optimizer import Optimizer
+import math
 
 # convenience wrapper for Optimizer.Register
 register = Optimizer.register  # pylint: disable=invalid-name
@@ -124,7 +125,7 @@ class Radam(Optimizer):
     N_sma_threshhold : float, optional
         Adjustable threshold for adaptive Adam
     """
-    def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8,
+    def __init__(self, learning_rate=0.001, beta1=0.95, beta2=0.999, epsilon=1e-5,
                  N_sma_threshhold=5, **kwargs):
         super(Radam, self).__init__(learning_rate=learning_rate, **kwargs)
         self.beta1 = beta1
@@ -159,7 +160,7 @@ class Radam(Optimizer):
         #
         buffered = self.radam_buffer[int(t % 10)]
         if t == buffered[0]:
-            N_sma, step_size = buffered[1], buffer[2] 
+            N_sma, step_size = buffered[1], buffered[2] 
         else:
             buffered[0] = t
             beta2_t = pow(self.beta2, t)
@@ -167,7 +168,7 @@ class Radam(Optimizer):
             N_sma = N_sma_max - 2. * t * beta2_t / (1. - beta2_t)
             buffered[1] = N_sma
             if N_sma > self.N_sma_threshhold:
-                step_size = sqrt((1. - beta2_t) * (N_sma - 4.) / (N_sma_max - 4.) * (N_sma - 2.) / N_sma * N_sma_max / (N_sma_max - 2.)) / (1. - pow(self.beta1, t))
+                step_size = math.sqrt((1. - beta2_t) * (N_sma - 4.) / (N_sma_max - 4.) * (N_sma - 2.) / N_sma * N_sma_max / (N_sma_max - 2.)) / (1. - pow(self.beta1, t))
             else:
                 step_size = 1. / (1. - pow(self.beta1, t))
             buffered[2] = step_size
