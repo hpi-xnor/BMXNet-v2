@@ -30,7 +30,8 @@ blacklist = [
     'opencv2/opencv.hpp', 'sys/stat.h', 'sys/types.h', 'cuda.h', 'cuda_fp16.h', 'omp.h',
     'onnx/onnx.pb.h', 'execinfo.h', 'packet/sse-inl.h', 'emmintrin.h', 'thrust/device_vector.h',
     'cusolverDn.h', 'internal/concurrentqueue_internal_debug.h', 'relacy/relacy_std.hpp',
-    'relacy_shims.h', 'ittnotify.h', 'shared_mutex', 'nvToolsExt.h'
+    'relacy_shims.h', 'ittnotify.h', 'shared_mutex', 'nvToolsExt.h',
+    'x86intrin.h',
     ]
 
 minimum = int(sys.argv[6]) if len(sys.argv) > 5 else 0
@@ -142,6 +143,12 @@ def expand(x, pending, stage):
                 # Do not enable stacktrace logging
                 continue
             if uline.find('#include') < 0:
+                if uline.find('__BYTE_ORDER') > 0:
+                    line = re.sub(r'__BYTE_ORDER', '__BYTE_ORDER__', line.decode('utf-8'))
+                    line = line.encode('utf-8')
+                if uline.find('__LITTLE_ENDIAN') > 0:
+                    line = re.sub(r'__LITTLE_ENDIAN', '__LITTLE_ENDIAN__', line.decode('utf-8'))
+                    line = line.encode('utf-8')
                 out.write(line)
                 continue
             if uline.strip().find('#include') > 0:

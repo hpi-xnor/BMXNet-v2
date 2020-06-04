@@ -89,6 +89,9 @@
 #include "src/operator/tensor/elemwise_unary_op_basic.cc"
 #include "src/operator/tensor/elemwise_unary_op_trig.cc"
 #include "src/operator/tensor/matrix_op.cc"
+#include "src/operator/contrib/binary_inference/xnor.cc"
+#include "src/operator/contrib/binary_inference/binary_inference_convolution.cc"
+#include "src/operator/contrib/binary_inference/binary_inference_fully_connected.cc"
 
 #include "src/storage/storage.cc"
 
