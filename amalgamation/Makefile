@@ -48,6 +48,9 @@ endif
 
 .PHONY: all clean
 
+# definitions for binarization
+DEFS += -DBINARY_WORD_32=1 -DBINARY_WORD_64=0
+
 DEFS+=-DMSHADOW_USE_CUDA=0 -DMSHADOW_USE_MKL=0 -DMSHADOW_RABIT_PS=0 -DMSHADOW_DIST_PS=0 -DDMLC_LOG_STACK_TRACE=0
 DEFS+=-DMSHADOW_FORCE_STREAM -DMXNET_USE_OPENCV=0 -DMXNET_PREDICT_ONLY=1
 CFLAGS=-std=c++11 -Wno-unknown-pragmas -Wall $(DEFS)
@@ -115,7 +118,8 @@ ifneq ($(ANDROID), 1)
         android:
 else
         CFLAGS+=  -mhard-float -D_NDK_MATH_NO_SOFTFP=1 -O3
-        LDFLAGS+=  -Wl,--no-warn-mismatch -lm_hard
+        CFLAGS+=  -I${NDK}/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include
+        LDFLAGS+=  -Wl,--no-warn-mismatch
         android: jni_libmxnet_predict.so
 endif
 
