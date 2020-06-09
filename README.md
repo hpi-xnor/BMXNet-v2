@@ -7,7 +7,7 @@ This aim was to have only minimal changes to C++ code to get better maintainabil
 
 ## mxnet version
 
-This version of BMXNet 2 is based on: *mxnet v1.5.0*
+This version of BMXNet 2 is based on: *mxnet v1.5.1*
 
 ## News
 
@@ -21,6 +21,8 @@ See all BMXNet changes: [Changelog](CHANGELOG.md).
     - Note that this project is still in beta and changes might be frequent
 
 # Setup
+
+If you only want to test the basics, you can also look at our [docker setup](#docker-setup).
 
 We use [CMake](https://cmake.org/download/) to build the project.
 Make sure to [install all the dependencies described here](docs/install/build_from_source.md#prerequisites).
@@ -113,6 +115,48 @@ The rest of our code resides in the following folders/files:
 - Converter is in [tools/binary_converter](tools/binary_converter)
 
 For more details see the [Changelog](CHANGELOG.md).
+
+## Docker setup
+
+A docker image for testing of BMXNet can be build similar to our CI script at [.gitlab-ci.yml](.gitlab-ci.yml), however it only supports CPU, so actual training might be tedious.
+
+```bash
+cd ci
+docker build -f docker/Dockerfile.build.ubuntu_cpu --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 --cache-from bmxnet2-base/build.ubuntu_cpu -t bmxnet2-base/build.ubuntu_cpu docker
+```
+
+Then you can enter the container (and automatically delete it)
+```bash
+docker run --rm -it bmxnet2-base/build.ubuntu_cpu # deletes the container after running
+docker run -it bmxnet2-base/build.ubuntu_cpu # keeps the container after running (it needs to be removed manually later)
+```
+
+Inside the container you can now clone, build and test BMXNet 2
+```bash
+# clone
+mkdir -p /builds/
+cd /builds/
+git clone https://github.com/hpi-xnor/BMXNet-v2.git bmxnet --recursive
+cd bmxnet
+# build
+mkdir build
+cd build
+cmake -DBINARY_WORD_TYPE=uint32 -DUSE_CUDA=OFF -DUSE_MKL_IF_AVAILABLE=OFF -GNinja ..
+cd ..
+cmake --build build
+export PYTHONPATH=/builds/bmxnet/python # add python binding
+# run the tests (we need to upgrade pytest first via pip3)
+pip3 install pytest --upgrade
+pytest tests/binary
+```
+
+You can even train a simple binary MNIST model, but you might need to update the examples to the newest version first (checkout the master branch).
+```bash
+cd example/bmxnet-examples/mnist/
+git checkout master
+pip3 install mxboard
+python3 mnist-lenet.py --bits 1 # trains a binary lenet model with 1 bit activations and 1 bit weights on MNIST
+```
 
 ### Citing BMXNet 2
 

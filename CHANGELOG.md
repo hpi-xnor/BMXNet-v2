@@ -6,11 +6,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.4.0] - Unreleased
+## [0.4.1] - 2020-06-09
+
+### Added
+
+- RAdam optimizer
+- Docker build instructions
+
+## [0.4.0] - 2019-12-18
 
 ### Changed
 
-- Upgrade base version of mxnet to *mxnet v1.5.0*
+- Upgrade base version of mxnet to *mxnet v1.5.1*
 
 ### Fixed
 
