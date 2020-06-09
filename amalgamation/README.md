@@ -43,22 +43,20 @@ This module is created by [Jack Deng](https://github.com/jdeng).
 
 Android
 ---------------
-Setup NDK and build your standalone toolchain. [Instructions](http://developer.android.com/ndk/guides/standalone_toolchain.html#itc) Use the Advanced Method!!! In particular set PATH, CC and CXX. The minimum API level required is 16.
-
-Example:
-```
-export PATH=/tmp/my-android-toolchain/bin:$PATH
-export CC=arm-linux-androideabi-gcc   # or export CC=arm-linux-androideabi-clang
-export CXX=arm-linux-androideabi-g++  # or export CXX=arm-linux-androideabi-clang++
-```
-
 Build OpenBLAS for Android: [Build OpenBLAS](https://github.com/xianyi/OpenBLAS/wiki/How-to-build-OpenBLAS-for-Android) Please put OpenBLAS source code outside mxnet directory.
-Modify OPENBLAS_ROOT in Makefile
-Type ```make ANDROID=1```
+Set OPENBLAS_ROOT in Makefile or in your environment variable to the place, where you installed OpenBLAS.
+
+Setup NDK (tested with NDK Version 21) and configure the toolchain ([Instructions](https://developer.android.com/ndk/guides/other_build_systems)). Follow the `Non-Autoconfig make projects`part.
+Make sure to set the `NDK` environment variable to the root of your NDK installation, e.g. (on Arch Linux) `export NDK=/opt/android-ndk`.
+
+You can then invoke the amalgamation for Android like so (considering that you set all environment variables according to the NDK Guide):
+```
+make ANDROID=1 CC=$TOOLCHAIN/bin/$TARGET$API-clang CXX=$TOOLCHAIN/bin/$TARGET$API-clang++ AR=$TOOLCHAIN/bin/$TARGET-ar RANLIB=$TOOLCHAIN/bin/$TARGET-ranlib android
+```
 
 In most cases you will want to use jni_libmxnet_predict.so. It contains the JNIs. In case you want to build your own JNI, link with libmxnet_predict.o
 
-You can use generated library in [Leliana WhatsThis Android app](https://github.com/Leliana/WhatsThis). Rename jni_libmxnet_predict.so to libmxnet_predict.so and overwrite default library to use up-to-date mxnet version.
+You can use generated library in our [Android Image Classification App](https://github.com/hpi-xnor/android-image-classification). Rename jni_libmxnet_predict.so to libmxnet_predict.so and overwrite default library to use up-to-date mxnet version.
 
 Javascript
 ---------------
