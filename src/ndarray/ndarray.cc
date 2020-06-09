@@ -1837,7 +1837,7 @@ void NDArray::Load(dmlc::Stream* fi,
   CHECK(fi->Read(&reserved))
       << "Invalid NDArray file format";
   CHECK(header == kMXAPINDArrayListMagic)
-      << "Invalid NDArray file format";
+      << "Invalid NDArray file format, is: " << std::hex << (uint64_t) header << "Should be: "<< std::hex << kMXAPINDArrayListMagic;
   CHECK(fi->Read(data))
       << "Invalid NDArray file format";
   CHECK(fi->Read(keys))

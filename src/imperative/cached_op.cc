@@ -362,7 +362,7 @@ bool CachedOp::SetForwardGraph(
     storage[idx.entry_id(idx.outputs()[i])] = exec::kExternalStorageID;
   }
 
-  auto mem_plan = PlanMemory(
+  auto mem_plan = MXPlanMemory(
       &g, std::move(storage), g.GetAttr<std::vector<uint32_t> >(
           recording ? "full_ref_count" : "forward_ref_count"));
   g.attrs[recording ? "full_mem_plan" : "forward_mem_plan"] =
@@ -490,7 +490,7 @@ bool CachedOp::SetBackwardGraph(
   for (const auto i : idx.input_nodes()) storage[idx.entry_id(i, 0)] = exec::kExternalStorageID;
   for (const auto i : idx.outputs()) storage[idx.entry_id(i)] = exec::kExternalStorageID;
 
-  auto mem_plan = PlanMemory(
+  auto mem_plan = MXPlanMemory(
       &g, std::move(storage), g.GetAttr<std::vector<uint32_t> >("backward_ref_count"),
       {num_forward_nodes, idx.num_nodes()},
       {num_forward_entries, idx.num_node_entries()},

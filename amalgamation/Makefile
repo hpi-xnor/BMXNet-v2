@@ -52,7 +52,7 @@ endif
 DEFS += -DBINARY_WORD_32=1 -DBINARY_WORD_64=0
 
 DEFS+=-DMSHADOW_USE_CUDA=0 -DMSHADOW_USE_MKL=0 -DMSHADOW_RABIT_PS=0 -DMSHADOW_DIST_PS=0 -DDMLC_LOG_STACK_TRACE=0
-DEFS+=-DMSHADOW_FORCE_STREAM -DMXNET_USE_OPENCV=0 -DMXNET_PREDICT_ONLY=1
+DEFS+=-DMSHADOW_FORCE_STREAM -DMXNET_USE_OPENCV=0 -DMXNET_PREDICT_ONLY=1 
 CFLAGS=-std=c++11 -Wno-unknown-pragmas -Wall $(DEFS)
 
 # if architecture of the CPU supports F16C instruction set, enable USE_F16C for fast fp16 computation on CPU
@@ -117,7 +117,7 @@ jni_libmxnet_predict.so: jni_libmxnet_predict.o
 ifneq ($(ANDROID), 1)
         android:
 else
-        CFLAGS+=  -mhard-float -D_NDK_MATH_NO_SOFTFP=1 -O3
+        CFLAGS+=  -mhard-float -D_NDK_MATH_NO_SOFTFP=1 -DDMLC_IO_USE_LITTLE_ENDIAN=0 -O3
         CFLAGS+=  -I${NDK}/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include
         LDFLAGS+=  -Wl,--no-warn-mismatch
         android: jni_libmxnet_predict.so

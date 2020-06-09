@@ -37,6 +37,9 @@ blacklist = [
 minimum = int(sys.argv[6]) if len(sys.argv) > 5 else 0
 android = int(sys.argv[7]) if len(sys.argv) > 6 else 0
 
+# print(sys.argv)
+# sys.exit(1)
+
 # blacklist linear algebra headers when building without blas.
 if minimum != 0:
     blacklist.append('linalg.h')
