@@ -317,7 +317,7 @@ size_t MXAllocMemory(const Graph& ret, const IndexedGraph& idx,
         // use -2 to indicate that the node was never touched.
         storage_inplace_index[eid] = -2;
       }
-      if (storage[eid] == GraphAllocator::kBadStorageID) {
+      if (storage[eid] == MXGraphAllocator::kBadStorageID) {
         ++num_not_allocated;
       }
     }
