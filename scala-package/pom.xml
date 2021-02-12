@@ -54,7 +54,7 @@
 
   <properties>
     <java.version>1.7</java.version>
-    <scala.version>2.11.8</scala.version>
+    <scala.version>2.13.2</scala.version>
     <build.platform/>
     <scala.binary.version>2.11</scala.binary.version>
     <base.revision>1.5.1</base.revision>
